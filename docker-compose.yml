@@ -1,8 +1,7 @@
-version: "3"
 services:
   node:
     image: "node:lts-alpine"
-    user: "node"
+    user: "root"
     working_dir: /home/node/app
     volumes:
       - ./server/:/home/node/app
@@ -18,8 +17,8 @@ services:
       - ./docker/certs:/etc/ssl/certs
       - ./docker/openssl:/mnt/openssl
     ports:
-      - "8080:80"
-      - "443:443"
+      - "42000:80"
+      - "42001:443"
     env_file: ./docker/fqdn.env
     entrypoint: /mnt/openssl/create.sh
-    command: ["nginx", "-g", "daemon off;"]
+    command: [ "nginx", "-g", "daemon off;" ]

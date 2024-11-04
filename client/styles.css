@@ -715,7 +715,7 @@ x-dialog x-paper {
 .model {
     display: none; /* 默认隐藏 */
     position: fixed; /* 固定定位 */
-    z-index: 1; /* 设置层级 */
+    z-index: 2; /* 设置层级 */
     left: 0;
     top: 0;
     width: 100%;
@@ -728,7 +728,7 @@ x-dialog x-paper {
     background-color: #fefefe;
     margin: 14% auto 0 auto;
     height: 180px;
-    width: 180px;
+    width: 170px;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -112,7 +112,7 @@
 	<x-background class="full center">
 		<x-paper shadow="2">
 			<h3>文件已收到</h3>
-			<div class="font-subheading" id="fileName">Filename文件名</div>
+			<div class="font-subheading" id="fileName">文件名</div>
 			<div class="font-body2" id="fileSize"></div>
 			<div class='preview' style="visibility: hidden;">
 				<img id='img-preview' src="" alt="preview">
@@ -122,8 +122,8 @@
 				<input type="checkbox" id="autoDownload" checked="">
 			</div>
 			<div class="row-reverse">
-				<a class="button" close id="download" title="Download File" autofocus>Save</a>
-				<button class="button" close>Ignore</button>
+				<a class="button" close id="download" title="下载文件" autofocus>保存</a>
+				<button class="button" close>忽略</button>
 			</div>
 		</x-paper>
 	</x-background>
@@ -280,7 +280,6 @@
 	});
 	// 点击遮罩层关闭弹窗
 	qrcodeModel.addEventListener('click', (event) => {
-		console.log(event.target.id)
 		if (event.target.id === "qrcode-model" && event.target.style.display === 'block') {
 			qrcode.clear();
 			event.target.style.display = "none";

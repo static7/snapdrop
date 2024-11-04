@@ -1,0 +1,12 @@
+services:
+  node:
+    image: "node:lts-alpine"
+    container_name: snapdrop-node
+    user: root
+    working_dir: /home/node/app
+    volumes:
+      - ./:/home/node/app
+    ports:
+      - "44000:3000"
+    command: ash -c "npm install && node index.js"
+
