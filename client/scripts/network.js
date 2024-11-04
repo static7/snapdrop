@@ -15,7 +15,7 @@ class ServerConnection {
         if (this._isConnected() || this._isConnecting()) return;
         const ws = new WebSocket(this._endpoint());
         ws.binaryType = 'arraybuffer';
-        ws.onopen = e => console.log('WS: server connected');
+        ws.onopen = e => console.log('WS: 服务器已连接');
         ws.onmessage = e => this._onMessage(e.data);
         ws.onclose = e => this._onDisconnect();
         ws.onerror = e => console.error(e);
@@ -45,7 +45,7 @@ class ServerConnection {
                 Events.fire('display-name', msg);
                 break;
             default:
-                console.error('WS: unkown message type', msg);
+                console.error('WS: 未知消息类型', msg);
         }
     }
 
@@ -55,7 +55,7 @@ class ServerConnection {
     }
 
     _endpoint() {
-        // hack to detect if deployment or development environment
+        // hack 检测部署或开发环境
         const protocol = location.protocol.startsWith('https') ? 'wss' : 'ws';
         const webrtc = window.isRtcSupported ? '/webrtc' : '/fallback';
         const url = protocol + '://' + location.host + location.pathname + 'server' + webrtc;
@@ -69,10 +69,10 @@ class ServerConnection {
     }
 
     _onDisconnect() {
-        console.log('WS: server disconnected');
-        Events.fire('notify-user', 'Connection lost. Retry in 5 seconds...');
+        console.log('WS: 服务器已断开连接');
+        Events.fire('notify-user', '连接丢失, 10秒后重试...');
         clearTimeout(this._reconnectTimer);
-        this._reconnectTimer = setTimeout(_ => this._connect(), 5000);
+        this._reconnectTimer = setTimeout(_ => this._connect(), 10000);
     }
 
     _onVisibilityChange() {
@@ -187,12 +187,12 @@ class Peer {
 
     _onChunkReceived(chunk) {
         if(!chunk.byteLength) return;
-        
+
         this._digester.unchunk(chunk);
         const progress = this._digester.progress;
         this._onDownloadProgress(progress);
 
-        // occasionally notify sender about our progress 
+        // occasionally notify sender about our progress
         if (progress - this._lastProgress < 0.01) return;
         this._lastProgress = progress;
         this._sendProgress(progress);
@@ -212,7 +212,7 @@ class Peer {
         this._reader = null;
         this._busy = false;
         this._dequeueFile();
-        Events.fire('notify-user', 'File transfer completed.');
+        Events.fire('notify-user', '文件传输完成.');
     }
 
     sendText(text) {
@@ -254,7 +254,7 @@ class RTCPeer extends Peer {
     }
 
     _openChannel() {
-        const channel = this._conn.createDataChannel('data-channel', { 
+        const channel = this._conn.createDataChannel('data-channel', {
             ordered: true,
             reliable: true // Obsolete. See https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel/reliable
         });
@@ -292,7 +292,7 @@ class RTCPeer extends Peer {
     }
 
     _onChannelOpened(event) {
-        console.log('RTC: channel opened with', this._peerId);
+        console.log('RTC: 通道打开于', this._peerId);
         const channel = event.channel || event.target;
         channel.binaryType = 'arraybuffer';
         channel.onmessage = e => this._onMessage(e.data);
@@ -301,13 +301,13 @@ class RTCPeer extends Peer {
     }
 
     _onChannelClosed() {
-        console.log('RTC: channel closed', this._peerId);
+        console.log('RTC: 通道已关闭', this._peerId);
         if (!this.isCaller) return;
         this._connect(this._peerId, true); // reopen the channel
     }
 
     _onConnectionStateChange(e) {
-        console.log('RTC: state changed:', this._conn.connectionState);
+        console.log('RTC: 状态改变:', this._conn.connectionState);
         switch (this._conn.connectionState) {
             case 'disconnected':
                 this._onChannelClosed();
@@ -322,10 +322,10 @@ class RTCPeer extends Peer {
     _onIceConnectionStateChange() {
         switch (this._conn.iceConnectionState) {
             case 'failed':
-                console.error('ICE Gathering failed');
+                console.error('ICE 收集失败');
                 break;
             default:
-                console.log('ICE Gathering', this._conn.iceConnectionState);
+                console.log('ICE 采集', this._conn.iceConnectionState);
         }
     }
 

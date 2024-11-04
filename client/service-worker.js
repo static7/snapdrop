@@ -15,7 +15,7 @@ self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(function(cache) {
-        console.log('Opened cache');
+        console.log('打开缓存');
         return cache.addAll(urlsToCache);
       })
   );
@@ -38,7 +38,7 @@ self.addEventListener('fetch', function(event) {
 
 
 self.addEventListener('activate', function(event) {
-  console.log('Updating Service Worker...')
+  console.log('更新 Service Worker...')
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
       return Promise.all(
